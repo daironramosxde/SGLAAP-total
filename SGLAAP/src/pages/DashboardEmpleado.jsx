@@ -36,7 +36,7 @@ export default function DashboardEmpleado() {
   const fetchEmpleadoYDatos = async () => {
     try {
       // Obtener el empleado asociado al correo del usuario logueado
-      const resEmpleado = await axios.get('http://localhost:5000/api/v1/employees', {
+      const resEmpleado = await axios.get(`${import.meta.env.VITE_API}/api/v1/employees`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const empleado = resEmpleado.data.data.find(emp => emp.email === auth.email);
@@ -44,7 +44,7 @@ export default function DashboardEmpleado() {
       if (!empleado) return;
 
       // Obtener eventos del restaurante del empleado
-      const resEventos = await axios.get('http://localhost:5000/api/v1/events', {
+      const resEventos = await axios.get(`${import.meta.env.VITE_API}/api/v1/events`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const eventosData = (Array.isArray(resEventos.data) ? resEventos.data : resEventos.data.data)
@@ -52,7 +52,7 @@ export default function DashboardEmpleado() {
       setEventos(eventosData);
 
       // Obtener horarios del empleado
-      const resHorarios = await axios.get('http://localhost:5000/api/v1/schedules', {
+      const resHorarios = await axios.get(`${import.meta.env.VITE_API}/api/v1/schedules`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const horariosData = (Array.isArray(resHorarios.data) ? resHorarios.data : resHorarios.data.data)
