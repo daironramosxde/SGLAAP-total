@@ -1,0 +1,72 @@
+/* src/pages/SettingsPage.css */
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.settings-card {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.settings-card h4 {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.settings-form label {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.settings-form input {
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+.settings-form input:disabled {
+  background-color: #f0f0f0;
+  color: #777;
+}
+
+.settings-form .btn {
+  margin-top: 1rem;
+}
+
+.theme-toggle .form-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* DARK MODE */
+body.dark .settings-card {
+  background: #27293d;
+  color: #f0f0f0;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05);
+}
+
+body.dark .settings-form input {
+  background-color: #1e1e2f;
+  border-color: #555;
+  color: #fff;
+}
+
+body.dark .settings-form input:disabled {
+  background-color: #333;
+  color: #aaa;
+}
+
+body.dark .form-check-label {
+  color: #f0f0f0;
+}

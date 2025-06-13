@@ -1,0 +1,32 @@
+/* src/styles/EmployeesPage.css */
+
+body.dark-theme .employee-form input,
+body.dark-theme .employee-form select,
+body.dark-theme .employee-form button,
+body.dark-theme .table {
+  background-color: #1e1e2f;
+  color: #f0f0f0;
+  border-color: #333;
+}
+
+body.dark-theme .table th,
+body.dark-theme .table td {
+  color: #f0f0f0;
+  border-color: #333;
+}
+
+.employee-form input,
+.employee-form select {
+  border-radius: 4px;
+}
+
+.employee-form button {
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+  text-align: left;
+}

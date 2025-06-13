@@ -1,0 +1,23 @@
+/* src/components/DashboardLayout.css */
+
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f1f1f1;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #f1f1f1;
+}
+
+/* Dark mode */
+body.dark .dashboard-container {
+  background-color: #1e1e2f;
+}
+
+body.dark .main-content {
+  background-color: #1e1e2f;
+  color: #f0f0f0;
+}

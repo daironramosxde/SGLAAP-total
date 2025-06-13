@@ -1,0 +1,114 @@
+/* DashboardGerente.css con soporte para dark-theme */
+
+.dashboard-gerente {
+  padding: 1rem;
+  color: #1e1e2f;
+  background-color: #f1f1f1;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body.dark-theme .dashboard-gerente {
+  background-color: #1e1e2f;
+  color: #f0f0f0;
+}
+
+.dashboard-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.kpi-section {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.kpi-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  flex: 1;
+  min-width: 200px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  color: #1e1e2f;
+}
+
+body.dark-theme .kpi-card {
+  background: #27293d;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.kpi-card:hover {
+  transform: translateY(-4px);
+}
+
+.kpi-label {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+body.dark-theme .kpi-label {
+  color: #a0a0b2;
+}
+
+.kpi-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #007acc;
+}
+
+body.dark-theme .kpi-value {
+  color: #00d4ff;
+}
+
+.card,
+.calendar-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  color: #1e1e2f;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+body.dark-theme .card,
+body.dark-theme .calendar-card {
+  background: #27293d;
+  color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.chart-title,
+.calendar-title {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.calendar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Recharts tooltip */
+.recharts-tooltip-wrapper {
+  z-index: 999;
+}
+
+@media (max-width: 768px) {
+  .kpi-section {
+    flex-direction: column;
+  }
+  .calendar-section {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,85 @@
+/* src/styles/SchedulePage.css */
+
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #0d3b66;
+  color: white;
+  min-height: 100vh;
+}
+
+.logo-img {
+  width: 80%;
+  max-width: 180px;
+}
+
+.nav-link {
+  color: white;
+  margin-bottom: 10px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.nav-link.active,
+.nav-link:hover {
+  background-color: #f4a261;
+  color: black;
+}
+
+.main-content {
+  flex: 1;
+  background: #f1f1f1;
+  padding: 20px;
+}
+
+.schedule-form input,
+.schedule-form select {
+  border-radius: 4px;
+}
+
+.btn-danger,
+.btn-primary {
+  border-radius: 4px;
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+}
+
+/* Dark mode */
+body.dark .dashboard-container {
+  background-color: #1e1e2f;
+  color: #f0f0f0;
+}
+
+body.dark .main-content {
+  background-color: #1e1e2f;
+  color: #ffffff;
+}
+
+body.dark .table {
+  background-color: #2b2b3c;
+  color: #f0f0f0;
+}
+
+body.dark .table th,
+body.dark .table td {
+  border-color: #444;
+}
+
+body.dark .btn-primary {
+  background-color: #00a8e8;
+  border-color: #00a8e8;
+}
+
+body.dark .btn-danger {
+  background-color: #e63946;
+  border-color: #e63946;
+}

@@ -1,0 +1,51 @@
+.restaurant-form input {
+  border-radius: 4px;
+}
+
+.restaurant-form button {
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+  text-align: left;
+}
+
+.table td:last-child {
+  white-space: nowrap;
+}
+
+.btn-sm {
+  padding: 4px 10px;
+  font-size: 0.875rem;
+}
+
+/* Modo oscuro */
+.dark-theme .restaurant-form input,
+.dark-theme .restaurant-form button,
+.dark-theme .table {
+  background-color: #1e1e2f;
+  color: #f0f0f0;
+  border-color: #444;
+}
+
+.dark-theme .table th,
+.dark-theme .table td {
+  color: #f0f0f0;
+  background-color: #27293d;
+  border-color: #444;
+}
+
+.dark-theme .btn-primary,
+.dark-theme .btn-danger {
+  background-color: #f4a261;
+  color: black;
+  border: none;
+}
+
+.dark-theme .btn-primary:hover,
+.dark-theme .btn-danger:hover {
+  filter: brightness(0.9);
+}

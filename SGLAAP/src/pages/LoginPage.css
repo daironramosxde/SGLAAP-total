@@ -1,0 +1,36 @@
+/* src/pages/LoginPage.css */
+.login-container {
+  height: 100vh;
+  background: linear-gradient(90deg, #f3f3f3 50%, #ffffff 50%);
+}
+
+.login-left {
+  width: 50%;
+  background: linear-gradient(145deg, #00c4cc, #29b6f6);
+  padding: 2rem;
+  text-align: center;
+}
+
+.login-left .logo {
+  width: 120px;
+  margin-top: 2rem;
+}
+
+.login-right {
+  width: 50%;
+  background-color: #ffffff;
+}
+
+.btn-aap {
+  background: linear-gradient(to right, #00c4cc, #29b6f6);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 0.6rem 1.2rem;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+.btn-aap:hover {
+  background: linear-gradient(to right, #29b6f6, #00c4cc);
+}

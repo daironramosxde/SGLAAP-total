@@ -1,0 +1,53 @@
+body.dark .rbc-calendar,
+body.dark .rbc-time-view,
+body.dark .rbc-month-view,
+body.dark .rbc-header,
+body.dark .rbc-time-header,
+body.dark .rbc-timeslot-group,
+body.dark .rbc-time-content,
+body.dark .rbc-event,
+body.dark .rbc-day-bg,
+body.dark .rbc-time-gutter,
+body.dark .rbc-date-cell {
+  background-color: #1e1e2f;
+  color: #f0f0f0;
+  border-color: #2a2a40;
+}
+
+body.dark .rbc-event {
+  background-color: #2a9d8f !important;
+  color: white !important;
+  border-radius: 5px;
+  padding: 2px 6px;
+}
+
+body.dark .rbc-toolbar,
+body.dark .rbc-toolbar button {
+  background-color: #1e1e2f;
+  color: #f0f0f0;
+  border: 1px solid #333;
+}
+
+body.dark .rbc-toolbar button.rbc-active,
+body.dark .rbc-toolbar button:hover {
+  background-color: #00a8e8;
+  color: black;
+}
+
+body.dark .rbc-time-gutter,
+body.dark .rbc-time-header-content {
+  background-color: #1a1a2e;
+  color: #f0f0f0;
+}
+
+body.dark .rbc-today {
+  background-color: rgba(0, 168, 232, 0.1);
+}
+
+body.dark .rbc-off-range-bg {
+  background-color: #2a2a40;
+}
+
+body.dark .rbc-current-time-indicator {
+  background-color: #ff6b6b;
+}
