@@ -1,4 +1,3 @@
-// src/pages/DashboardGerente.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import DashboardLayout from '../components/DashboardLayout';
@@ -18,11 +17,12 @@ export default function DashboardGerente() {
 
   const fetchData = async () => {
     try {
+      const API_URL = import.meta.env.VITE_API;
       const [resEvents, resEmployees] = await Promise.all([
-        axios.get('http://localhost:5000/api/v1/events', {
+        axios.get(`${API_URL}/api/v1/events`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        axios.get('http://localhost:5000/api/v1/employees', {
+        axios.get(`${API_URL}/api/v1/employees`, {
           headers: { Authorization: `Bearer ${token}` },
         })
       ]);
