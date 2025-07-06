@@ -7561,3 +7561,6 @@
 2025-06-13T18:26:43.363Z - OPTIONS /api/v1/events
 2025-06-13T18:26:43.379Z - GET /api/v1/events
 2025-06-13T18:26:43.558Z - GET /api/v1/schedules
+2025-06-28T19:19:20.238Z - POST /api/v1/auth/login
+2025-07-06T12:49:10.273Z - POST /api/v1/auth/login
+2025-07-06T12:49:32.841Z - GET /api/v1/users
