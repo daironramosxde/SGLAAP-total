@@ -1,4 +1,3 @@
-// src/pages/DashboardEmpleado.jsx
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import DashboardLayoutEmpleado from '../components/DashboardLayoutEmpleado';
@@ -14,6 +13,7 @@ export default function DashboardEmpleado() {
   const [fechaFiltro, setFechaFiltro] = useState('');
   const { auth } = useContext(AuthContext);
   const token = localStorage.getItem('token');
+  const API_URL = import.meta.env.VITE_API;
 
   useEffect(() => {
     if (auth?.email) {
@@ -35,24 +35,21 @@ export default function DashboardEmpleado() {
 
   const fetchEmpleadoYDatos = async () => {
     try {
-      // Obtener el empleado asociado al correo del usuario logueado
-      const resEmpleado = await axios.get(`${import.meta.env.VITE_API}/api/v1/employees`, {
+      const resEmpleado = await axios.get(`${API_URL}/api/v1/employees`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const empleado = resEmpleado.data.data.find(emp => emp.email === auth.email);
 
       if (!empleado) return;
 
-      // Obtener eventos del restaurante del empleado
-      const resEventos = await axios.get(`${import.meta.env.VITE_API}/api/v1/events`, {
+      const resEventos = await axios.get(`${API_URL}/api/v1/events`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const eventosData = (Array.isArray(resEventos.data) ? resEventos.data : resEventos.data.data)
         .filter(e => e.restaurant === empleado.restaurant);
       setEventos(eventosData);
 
-      // Obtener horarios del empleado
-      const resHorarios = await axios.get(`${import.meta.env.VITE_API}/api/v1/schedules`, {
+      const resHorarios = await axios.get(`${API_URL}/api/v1/schedules`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const horariosData = (Array.isArray(resHorarios.data) ? resHorarios.data : resHorarios.data.data)

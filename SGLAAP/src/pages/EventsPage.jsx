@@ -14,10 +14,11 @@ const EventsPage = () => {
   });
   const [editingId, setEditingId] = useState(null);
   const token = localStorage.getItem('token');
+  const API_URL = import.meta.env.VITE_API;
 
   const fetchEvents = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/v1/events', {
+      const res = await axios.get(`${API_URL}/api/v1/events`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = Array.isArray(res.data) ? res.data : res.data.data;
@@ -29,7 +30,7 @@ const EventsPage = () => {
 
   const fetchRestaurants = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/v1/restaurants', {
+      const res = await axios.get(`${API_URL}/api/v1/restaurants`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = Array.isArray(res.data) ? res.data : res.data.data;
@@ -58,14 +59,15 @@ const EventsPage = () => {
 
     try {
       if (editingId) {
-        await axios.put(`http://localhost:5000/api/v1/events/${editingId}`, payload, {
+        await axios.put(`${API_URL}/api/v1/events/${editingId}`, payload, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.post('http://localhost:5000/api/v1/events', payload, {
+        await axios.post(`${API_URL}/api/v1/events`, payload, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }
+
       setForm({ name: '', date: '', description: '', restaurant: '' });
       setEditingId(null);
       fetchEvents();
@@ -86,7 +88,7 @@ const EventsPage = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/v1/events/${id}`, {
+      await axios.delete(`${API_URL}/api/v1/events/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchEvents();
@@ -112,9 +114,9 @@ const EventsPage = () => {
     <DashboardLayout>
       <h2 className="mb-4">{editingId ? 'Editar Evento' : 'Agregar Evento'}</h2>
 
-      <form onSubmit={handleSubmit} className="event-form mb-4">
-        <div className="row g-3">
-          <div className="col-md-3">
+      <form onSubmit={handleSubmit} className="event-form mb-4 p-3 shadow rounded bg-white">
+        <div className="row row-cols-1 row-cols-md-3 g-3">
+          <div className="col">
             <input
               className="form-control"
               name="name"
@@ -124,7 +126,7 @@ const EventsPage = () => {
               required
             />
           </div>
-          <div className="col-md-3">
+          <div className="col">
             <input
               type="datetime-local"
               className="form-control"
@@ -134,7 +136,7 @@ const EventsPage = () => {
               required
             />
           </div>
-          <div className="col-md-4">
+          <div className="col">
             <input
               className="form-control"
               name="description"
@@ -144,7 +146,7 @@ const EventsPage = () => {
               required
             />
           </div>
-          <div className="col-md-4">
+          <div className="col">
             <select
               className="form-select"
               name="restaurant"
@@ -164,8 +166,8 @@ const EventsPage = () => {
               )}
             </select>
           </div>
-          <div className="col-md-2">
-            <button type="submit" className="btn btn-primary w-100">
+          <div className="col">
+            <button type="submit" className="btn btn-primary w-100 h-100">
               {editingId ? 'Actualizar' : 'Agregar'}
             </button>
           </div>

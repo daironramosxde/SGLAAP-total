@@ -18,6 +18,7 @@ const EmployeesPage = () => {
   });
   const [editingId, setEditingId] = useState(null);
   const token = localStorage.getItem('token');
+  const API_URL = import.meta.env.VITE_API;
 
   const showToast = (message, type = 'info') => {
     toast[type](message, {
@@ -42,7 +43,7 @@ const EmployeesPage = () => {
 
   const fetchEmployees = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/v1/employees', {
+      const res = await axios.get(`${API_URL}/api/v1/employees`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setEmployees(res.data.data || []);
@@ -53,7 +54,7 @@ const EmployeesPage = () => {
 
   const fetchRestaurants = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/v1/restaurants', {
+      const res = await axios.get(`${API_URL}/api/v1/restaurants`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = Array.isArray(res.data) ? res.data : res.data.data;
@@ -77,11 +78,11 @@ const EmployeesPage = () => {
 
     try {
       if (editingId) {
-        await axios.put(`http://localhost:5000/api/v1/employees/${editingId}`, form, {
+        await axios.put(`${API_URL}/api/v1/employees/${editingId}`, form, {
           headers: { Authorization: `Bearer ${token}` }
         });
 
-        await axios.put(`http://localhost:5000/api/v1/users/email/${form.email}`, {
+        await axios.put(`${API_URL}/api/v1/users/email/${form.email}`, {
           name: form.name,
           role: form.role
         }, {
@@ -90,9 +91,8 @@ const EmployeesPage = () => {
 
         showToast('Empleado y usuario actualizados correctamente', 'success');
       } else {
-        // Crear usuario
         try {
-          await axios.post('http://localhost:5000/api/v1/auth/register', {
+          await axios.post(`${API_URL}/api/v1/auth/register`, {
             name: form.name,
             email: form.email,
             password: form.password,
@@ -110,8 +110,7 @@ const EmployeesPage = () => {
           }
         }
 
-        // Crear empleado
-        await axios.post('http://localhost:5000/api/v1/employees', {
+        await axios.post(`${API_URL}/api/v1/employees`, {
           name: form.name,
           email: form.email,
           position: form.position,
@@ -155,10 +154,10 @@ const EmployeesPage = () => {
   const handleDelete = async (id) => {
     try {
       const empleado = employees.find(e => e._id === id);
-      await axios.delete(`http://localhost:5000/api/v1/employees/${id}`, {
+      await axios.delete(`${API_URL}/api/v1/employees/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      await axios.delete(`http://localhost:5000/api/v1/users/email/${empleado.email}`, {
+      await axios.delete(`${API_URL}/api/v1/users/email/${empleado.email}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchEmployees();
@@ -186,15 +185,15 @@ const EmployeesPage = () => {
     <DashboardLayout>
       <h2 className="mb-4">{editingId ? 'Editar Empleado' : 'Agregar Empleado'}</h2>
 
-      <form onSubmit={handleSubmit} className="employee-form mb-4">
-        <div className="row g-3">
-          <div className="col-md-3">
+      <form onSubmit={handleSubmit} className="employee-form mb-4 p-3 shadow rounded bg-white">
+        <div className="row row-cols-1 row-cols-md-3 g-3">
+          <div className="col">
             <input className="form-control" name="name" placeholder="Nombre" value={form.name} onChange={handleChange} required />
           </div>
-          <div className="col-md-3">
+          <div className="col">
             <input type="email" className="form-control" name="email" placeholder="Correo" value={form.email} onChange={handleChange} required />
           </div>
-          <div className="col-md-3">
+          <div className="col">
             <select className="form-select" name="position" value={form.position} onChange={handleChange} required>
               <option value="">Selecciona un cargo</option>
               {positionOptions.map((pos) => (
@@ -202,21 +201,19 @@ const EmployeesPage = () => {
               ))}
             </select>
           </div>
-          <div className="col-md-3">
+          <div className="col">
             <select className="form-select" name="restaurant" value={form.restaurant} onChange={handleChange} required>
               <option value="">Selecciona un restaurante</option>
               {restaurants.length > 0 ? (
                 restaurants.map((r) => (
-                  <option key={r._id} value={r._id}>
-                    {r.name} - {r.location}
-                  </option>
+                  <option key={r._id} value={r._id}>{r.name} - {r.location}</option>
                 ))
               ) : (
                 <option disabled>No hay restaurantes disponibles</option>
               )}
             </select>
           </div>
-          <div className="col-md-3">
+          <div className="col">
             <input
               type="password"
               className="form-control"
@@ -227,22 +224,16 @@ const EmployeesPage = () => {
               required={!editingId}
             />
           </div>
-          <div className="col-md-3">
-            <select
-              className="form-select"
-              name="role"
-              value={form.role}
-              onChange={handleChange}
-              required
-            >
+          <div className="col">
+            <select className="form-select" name="role" value={form.role} onChange={handleChange} required>
               <option value="">Selecciona un rol</option>
               {roleOptions.map((role) => (
                 <option key={role.value} value={role.value}>{role.label}</option>
               ))}
             </select>
           </div>
-          <div className="col-md-3">
-            <button type="submit" className="btn btn-primary w-100">
+          <div className="col">
+            <button type="submit" className="btn btn-primary w-100 h-100">
               {editingId ? 'Actualizar' : 'Agregar'}
             </button>
           </div>

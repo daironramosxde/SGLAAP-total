@@ -15,10 +15,11 @@ const RestaurantsPage = () => {
   });
   const [editingId, setEditingId] = useState(null);
   const token = localStorage.getItem('token');
+  const API_URL = import.meta.env.VITE_API;
 
   const fetchRestaurants = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/v1/restaurants', {
+      const res = await axios.get(`${API_URL}/api/v1/restaurants`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = Array.isArray(res.data) ? res.data : res.data.data;
@@ -51,14 +52,15 @@ const RestaurantsPage = () => {
 
     try {
       if (editingId) {
-        await axios.put(`http://localhost:5000/api/v1/restaurants/${editingId}`, payload, {
+        await axios.put(`${API_URL}/api/v1/restaurants/${editingId}`, payload, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.post('http://localhost:5000/api/v1/restaurants', payload, {
+        await axios.post(`${API_URL}/api/v1/restaurants`, payload, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }
+
       setForm({ name: '', description: '', address: '', phone: '', lat: '', lng: '' });
       setEditingId(null);
       fetchRestaurants();
@@ -81,7 +83,7 @@ const RestaurantsPage = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/v1/restaurants/${id}`, {
+      await axios.delete(`${API_URL}/api/v1/restaurants/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchRestaurants();
@@ -90,7 +92,6 @@ const RestaurantsPage = () => {
     }
   };
 
-  // Tabla mostrará campos planos y anidados (lat, lng)
   const formattedRestaurants = restaurants.map((r) => ({
     _id: r._id,
     name: r.name,
@@ -105,28 +106,28 @@ const RestaurantsPage = () => {
     <DashboardLayout>
       <h2 className="mb-4">{editingId ? 'Editar Restaurante' : 'Agregar Restaurante'}</h2>
 
-      <form onSubmit={handleSubmit} className="restaurant-form mb-4">
-        <div className="row g-3">
-          <div className="col-md-4">
+      <form onSubmit={handleSubmit} className="restaurant-form mb-4 p-3 shadow rounded bg-white">
+        <div className="row row-cols-1 row-cols-md-3 g-3">
+          <div className="col">
             <input className="form-control" name="name" placeholder="Nombre" value={form.name} onChange={handleChange} required />
           </div>
-          <div className="col-md-4">
+          <div className="col">
             <input className="form-control" name="description" placeholder="Descripción" value={form.description} onChange={handleChange} required />
           </div>
-          <div className="col-md-4">
+          <div className="col">
             <input className="form-control" name="address" placeholder="Dirección" value={form.address} onChange={handleChange} required />
           </div>
-          <div className="col-md-3">
+          <div className="col">
             <input className="form-control" name="phone" placeholder="Teléfono" value={form.phone} onChange={handleChange} required />
           </div>
-          <div className="col-md-3">
+          <div className="col">
             <input type="number" step="any" className="form-control" name="lat" placeholder="Latitud" value={form.lat} onChange={handleChange} required />
           </div>
-          <div className="col-md-3">
+          <div className="col">
             <input type="number" step="any" className="form-control" name="lng" placeholder="Longitud" value={form.lng} onChange={handleChange} required />
           </div>
-          <div className="col-md-3">
-            <button type="submit" className="btn btn-primary w-100">
+          <div className="col">
+            <button type="submit" className="btn btn-primary w-100 h-100">
               {editingId ? 'Actualizar' : 'Agregar'}
             </button>
           </div>

@@ -1,14 +1,13 @@
-// src/pages/SchedulePage.jsx
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import Sidebar from '../components/Sidebar';
 import Notification from '../components/Notification';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import '../pages/SchedulePage.css';
+import DashboardLayout from '../components/DashboardLayout';
+import './SchedulePage.css';
 
 const localizer = momentLocalizer(moment);
 
@@ -23,6 +22,7 @@ export default function SchedulePage() {
   const [notification, setNotification] = useState(null);
 
   const token = localStorage.getItem('token');
+  const API_URL = import.meta.env.VITE_API;
   const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -33,9 +33,9 @@ export default function SchedulePage() {
   const fetchData = async () => {
     try {
       const [resR, resE, resS] = await Promise.all([
-        axios.get('http://localhost:5000/api/v1/restaurants', { headers: { Authorization: `Bearer ${token}` } }),
-        axios.get('http://localhost:5000/api/v1/employees', { headers: { Authorization: `Bearer ${token}` } }),
-        axios.get('http://localhost:5000/api/v1/schedules', { headers: { Authorization: `Bearer ${token}` } })
+        axios.get(`${API_URL}/api/v1/restaurants`, { headers: { Authorization: `Bearer ${token}` } }),
+        axios.get(`${API_URL}/api/v1/employees`, { headers: { Authorization: `Bearer ${token}` } }),
+        axios.get(`${API_URL}/api/v1/schedules`, { headers: { Authorization: `Bearer ${token}` } })
       ]);
       setRestaurants(resR.data.data);
       setEmployees(resE.data.data);
@@ -120,7 +120,7 @@ export default function SchedulePage() {
     };
 
     try {
-      await axios.post('http://localhost:5000/api/v1/schedules', payload, {
+      await axios.post(`${API_URL}/api/v1/schedules`, payload, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setForm({ day: '', startTime: '', endTime: '' });
@@ -154,7 +154,7 @@ export default function SchedulePage() {
     };
 
     try {
-      await axios.put(`http://localhost:5000/api/v1/schedules/${event.id}`, payload, {
+      await axios.put(`${API_URL}/api/v1/schedules/${event.id}`, payload, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchData();
@@ -170,7 +170,7 @@ export default function SchedulePage() {
       message: '¿Eliminar este horario?',
       onConfirm: async () => {
         try {
-          await axios.delete(`http://localhost:5000/api/v1/schedules/${event.id}`, {
+          await axios.delete(`${API_URL}/api/v1/schedules/${event.id}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           fetchData();
@@ -182,39 +182,36 @@ export default function SchedulePage() {
     });
   };
 
-  const eventStyleGetter = (event, start, end, isSelected) => {
-    return {
-      style: {
-        backgroundColor: '#007bff',
-        borderRadius: '5px',
-        border: 'none',
-        color: 'white',
-        padding: '4px',
-        cursor: 'pointer',
-        transition: '0.2s',
-      },
-      className: 'calendar-event'
-    };
-  };
+  const eventStyleGetter = () => ({
+    style: {
+      backgroundColor: '#007bff',
+      borderRadius: '5px',
+      border: 'none',
+      color: 'white',
+      padding: '4px',
+      cursor: 'pointer',
+      transition: '0.2s',
+    },
+    className: 'calendar-event'
+  });
 
   const filteredEmployees = employees.filter(emp => emp.restaurant === selectedRestaurant);
 
   return (
-    <div className="dashboard-container d-flex">
-      <Sidebar onLogout={() => { logout(); navigate('/login'); }} />
-      <main className="main-content p-4">
+    <DashboardLayout>
+      <div className="p-4">
         <h2 className="mb-4">Gestión de Horarios</h2>
 
         {notification && <Notification {...notification} onClose={() => setNotification(null)} />}
 
         <div className="row mb-3">
-          <div className="col-md-6">
+          <div className="col-md-6 mb-2">
             <select className="form-select" value={selectedRestaurant} onChange={handleSelectRest}>
               <option value="">Selecciona Restaurante</option>
               {restaurants.map(r => <option key={r._id} value={r._id}>{r.name}</option>)}
             </select>
           </div>
-          <div className="col-md-6">
+          <div className="col-md-6 mb-2">
             <select className="form-select" value={selectedEmployee} onChange={handleSelectEmp}>
               <option value="">Selecciona Empleado</option>
               {filteredEmployees.map(e => <option key={e._id} value={e._id}>{e.name}</option>)}
@@ -223,22 +220,24 @@ export default function SchedulePage() {
         </div>
 
         {selectedEmployee && (
-          <form className="mb-4" onSubmit={handleSubmit}>
-            <div className="row g-2">
-              <div className="col-md-3">
+          <form className="mb-4 p-3 bg-white shadow rounded" onSubmit={handleSubmit}>
+            <div className="row row-cols-1 row-cols-md-4 g-3">
+              <div className="col">
                 <select className="form-select" name="day" value={form.day} onChange={handleFormChange} required>
                   <option value="">Día</option>
-                  {['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].map(d => <option key={d} value={d}>{d}</option>)}
+                  {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(d => (
+                    <option key={d} value={d}>{d}</option>
+                  ))}
                 </select>
               </div>
-              <div className="col-md-3">
+              <div className="col">
                 <input type="time" className="form-control" name="startTime" value={form.startTime} onChange={handleFormChange} required />
               </div>
-              <div className="col-md-3">
+              <div className="col">
                 <input type="time" className="form-control" name="endTime" value={form.endTime} onChange={handleFormChange} required />
               </div>
-              <div className="col-md-3">
-                <button className="btn btn-success w-100" type="submit">Agregar horario</button>
+              <div className="col">
+                <button className="btn btn-success w-100 h-100" type="submit">Agregar horario</button>
               </div>
             </div>
           </form>
@@ -256,7 +255,7 @@ export default function SchedulePage() {
           draggableAccessor={() => true}
           eventPropGetter={eventStyleGetter}
         />
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }

@@ -1,0 +1,41 @@
+.calendar-container {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+  margin-bottom: 2rem;
+}
+
+.calendar-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  color: #0d3b66;
+}
+
+.calendar-selects {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.calendar-selects select {
+  flex: 1 1 250px;
+}
+
+@media (max-width: 768px) {
+  .calendar-container {
+    padding: 1.2rem;
+  }
+
+  .calendar-title {
+    font-size: 1.25rem;
+    text-align: center;
+  }
+
+  .calendar-selects {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}

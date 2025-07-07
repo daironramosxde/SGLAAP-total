@@ -1,11 +1,10 @@
-// src/components/ScheduleCalendar.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Calendar, dateFnsLocalizer, Views } from 'react-big-calendar';
 import { format, parse, startOfWeek, getDay } from 'date-fns';
 import es from 'date-fns/locale/es';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import '../components/CalendarOverride.css';
+import './ScheduleCalendar.css'; // Estilos mejorados
 
 const locales = { es };
 const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales });
@@ -26,11 +25,10 @@ export default function ScheduleCalendar() {
   const fetchData = async () => {
     try {
       const [resRest, resEmp, resHor] = await Promise.all([
-        axios.get('http://localhost:5000/api/v1/restaurants', { headers: { Authorization: `Bearer ${token}` } }),
-        axios.get('http://localhost:5000/api/v1/employees', { headers: { Authorization: `Bearer ${token}` } }),
-        axios.get('http://localhost:5000/api/v1/schedules', { headers: { Authorization: `Bearer ${token}` } })
+        axios.get(`${import.meta.env.VITE_API}/api/v1/restaurants`, { headers: { Authorization: `Bearer ${token}` } }),
+        axios.get(`${import.meta.env.VITE_API}/api/v1/employees`, { headers: { Authorization: `Bearer ${token}` } }),
+        axios.get(`${import.meta.env.VITE_API}/api/v1/schedules`, { headers: { Authorization: `Bearer ${token}` } }),
       ]);
-
       setRestaurants(resRest.data.data || []);
       setEmpleados(resEmp.data.data || []);
       setHorarios(resHor.data.data || []);
@@ -52,15 +50,15 @@ export default function ScheduleCalendar() {
   };
 
   const generarEventos = (empleadoId) => {
-    const empleado = empleados.find((e) => e._id === empleadoId);
+    const empleado = empleados.find(e => e._id === empleadoId);
     if (!empleado) return;
 
-    const horariosEmpleado = horarios.filter((h) => h.employee === empleadoId);
-    const eventosEmpleado = horariosEmpleado.map((h) => {
+    const horariosEmpleado = horarios.filter(h => h.employee === empleadoId);
+    const eventosEmpleado = horariosEmpleado.map(h => {
       const [entradaHora, entradaMin] = h.startTime.split(':');
       const [salidaHora, salidaMin] = h.endTime.split(':');
-
       const diaSemana = getDiaSemana(h.day);
+
       const hoy = new Date();
       const baseDate = new Date(hoy);
       baseDate.setDate(hoy.getDate() + ((7 + diaSemana - hoy.getDay()) % 7));
@@ -81,30 +79,26 @@ export default function ScheduleCalendar() {
     setEventos(eventosEmpleado);
   };
 
-  const empleadosFiltrados = empleados.filter((e) => e.restaurant === selectedRest);
+  const empleadosFiltrados = empleados.filter(e => e.restaurant === selectedRest);
 
   return (
-    <div className="mb-4">
-      <h5 className="mb-3">🕓 Visualizador de Horarios por Empleado</h5>
+    <div className="calendar-container">
+      <h4 className="calendar-title">🕓 Visualizador de Horarios</h4>
 
-      <div className="row mb-3">
-        <div className="col-md-6">
-          <select className="form-select" value={selectedRest} onChange={handleChangeRest}>
-            <option value="">Seleccionar restaurante</option>
-            {restaurants.map((r) => (
-              <option key={r._id} value={r._id}>{r.name} - {r.location}</option>
-            ))}
-          </select>
-        </div>
+      <div className="calendar-selects">
+        <select className="form-select" value={selectedRest} onChange={handleChangeRest}>
+          <option value="">Seleccionar restaurante</option>
+          {restaurants.map(r => (
+            <option key={r._id} value={r._id}>{r.name} - {r.location}</option>
+          ))}
+        </select>
 
-        <div className="col-md-6">
-          <select className="form-select" value={selectedEmpleado} onChange={handleChangeEmpleado} disabled={!selectedRest}>
-            <option value="">Seleccionar empleado</option>
-            {empleadosFiltrados.map((e) => (
-              <option key={e._id} value={e._id}>{e.name} - {e.position}</option>
-            ))}
-          </select>
-        </div>
+        <select className="form-select" value={selectedEmpleado} onChange={handleChangeEmpleado} disabled={!selectedRest}>
+          <option value="">Seleccionar empleado</option>
+          {empleadosFiltrados.map(e => (
+            <option key={e._id} value={e._id}>{e.name} - {e.position}</option>
+          ))}
+        </select>
       </div>
 
       {eventos.length > 0 ? (
@@ -123,12 +117,14 @@ export default function ScheduleCalendar() {
               backgroundColor: '#0d3b66',
               color: 'white',
               borderRadius: '5px',
-              padding: '2px 6px',
+              padding: '4px 8px',
+              fontSize: '0.9rem',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
             },
           })}
         />
       ) : (
-        <p className="text-muted">Selecciona un empleado para ver sus horarios.</p>
+        <p className="text-muted mt-3">Selecciona un empleado para ver sus horarios.</p>
       )}
     </div>
   );

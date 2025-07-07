@@ -1,50 +1,84 @@
+/* Sidebar general */
 .sidebar {
   width: 250px;
-  background-color: #0d3b66;
-  color: white;
   min-height: 100vh;
-  padding-top: 20px;
+  background: linear-gradient(180deg, #002b5b, #003f73);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  transition: transform 0.3s ease;
 }
 
-.logo-img {
-  width: 80%;
-  max-width: 180px;
-  margin: 0 auto;
-  display: block;
+.sidebar .logo {
+  padding: 20px 0;
 }
 
-.nav-link {
-  color: white;
-  margin-bottom: 10px;
-  font-weight: 500;
+.sidebar .logo-img {
+  max-width: 120px;
+  height: auto;
+}
+
+/* Navegación */
+.sidebar .nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar .nav-link {
+  color: #89c4ff;
+  padding: 12px 16px;
+  margin: 4px 0;
   text-decoration: none;
-  padding: 10px;
-  border-radius: 5px;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: background 0.3s ease, color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.nav-link.active,
-.nav-link:hover {
-  background-color: #f4a261;
-  color: black;
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+  background-color: #0058a3;
+  color: #fff;
 }
 
+/* Botón cerrar sesión o configuración */
 .logout-btn-container {
-  margin-top: auto;
-  padding-bottom: 20px;
+  padding: 16px;
 }
 
-/* 🌙 Modo oscuro con clase .dark en un div padre */
-.dark .sidebar {
-  background-color: #151530;
-  color: #f0f0f0;
+.logout-btn-container .btn {
+  font-weight: 600;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.dark .nav-link {
-  color: #f0f0f0;
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    position: fixed;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
 }
 
-.dark .nav-link.active,
-.dark .nav-link:hover {
-  background-color: #00a8e8;
-  color: black;
+/* Espacio para el contenido principal cuando el sidebar está fijo */
+.main-content {
+  margin-left: 250px;
+  transition: margin 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+  }
 }

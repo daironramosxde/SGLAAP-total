@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import './Sidebar.css';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
@@ -16,7 +16,7 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="logo text-center my-4">
         <img src="/logo.png" alt="Logo" className="logo-img" />
       </div>

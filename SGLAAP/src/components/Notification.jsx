@@ -1,4 +1,3 @@
-// src/components/Notification.jsx
 import React from 'react';
 import './Notification.css';
 
@@ -13,18 +12,18 @@ const Notification = ({ type, message, onClose, onConfirm }) => {
 
   return (
     <div className="notification-backdrop" onClick={handleBackgroundClick}>
-      <div className={`notification-box ${type}`}>
+      <div className={`notification-box animate-in ${type}`}>
         <p className="notification-message">{message}</p>
-        {type === 'confirm' ? (
-          <div className="notification-actions">
-            <button className="btn btn-danger me-2" onClick={onConfirm}>Confirmar</button>
-            <button className="btn btn-secondary" onClick={onClose}>Cancelar</button>
-          </div>
-        ) : (
-          <div className="notification-actions">
+        <div className="notification-actions">
+          {type === 'confirm' ? (
+            <>
+              <button className="btn btn-danger me-2" onClick={onConfirm}>Confirmar</button>
+              <button className="btn btn-secondary" onClick={onClose}>Cancelar</button>
+            </>
+          ) : (
             <button className="btn btn-primary" onClick={onClose}>Cerrar</button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

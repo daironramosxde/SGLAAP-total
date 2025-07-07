@@ -1,4 +1,3 @@
-// src/pages/LoginPage.jsx
 import { useState, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
@@ -32,15 +31,15 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="login-container d-flex">
-      <div className="login-left text-white d-flex flex-column justify-content-center align-items-center">
-        <h2>Al Agua Patos</h2>
-        <p>¡Gestiona tus reservas y eventos fácil y rápido!</p>
-        <img src="/logo.png" alt="Logo AAP" className="logo" />
+    <div className="login-container d-flex flex-column flex-md-row min-vh-100">
+      <div className="login-left d-flex flex-column justify-content-center align-items-center text-white p-5 w-100 w-md-50">
+        <h2 className="fw-bold">Al Agua Patos</h2>
+        <p className="text-center px-4">¡Gestiona tus reservas y eventos fácil y rápido!</p>
+        <img src="/logo.png" alt="Logo AAP" className="logo mt-3" />
       </div>
-      <div className="login-right d-flex flex-column justify-content-center px-5">
+      <div className="login-right d-flex flex-column justify-content-center p-5 bg-light w-100 w-md-50">
         <h3 className="mb-4 text-center">Iniciar Sesión</h3>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="w-100" style={{ maxWidth: '400px', margin: '0 auto' }}>
           <div className="mb-3">
             <label className="form-label">Correo electrónico</label>
             <input
