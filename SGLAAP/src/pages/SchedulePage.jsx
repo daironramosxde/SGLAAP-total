@@ -1,3 +1,4 @@
+// src/pages/SchedulePage.jsx
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
@@ -5,13 +6,14 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Notification from '../components/Notification';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../components/DashboardLayout';
+import FormSelectGroup from '../components/FormSelectGroup';
+import FormTimeInput from '../components/FormTimeInput';
 import './SchedulePage.css';
 
 const localizer = momentLocalizer(moment);
 
-export default function SchedulePage() {
+const SchedulePage = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [schedules, setSchedules] = useState([]);
@@ -24,7 +26,6 @@ export default function SchedulePage() {
   const token = localStorage.getItem('token');
   const API_URL = import.meta.env.VITE_API;
   const { logout } = useContext(AuthContext);
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
@@ -96,21 +97,23 @@ export default function SchedulePage() {
     const start = moment(form.startTime, 'HH:mm');
     const end = moment(form.endTime, 'HH:mm');
     const duration = moment.duration(end.diff(start)).asHours();
+
     const totalDayHours = empSchedules.reduce((acc, s) => {
       const sStart = moment(s.startTime, 'HH:mm');
       const sEnd = moment(s.endTime, 'HH:mm');
       return acc + moment.duration(sEnd.diff(sStart)).asHours();
     }, 0);
 
-    const allSchedules = schedules.filter(s => s.employee === selectedEmployee);
-    const totalWeekHours = allSchedules.reduce((acc, s) => {
-      const sStart = moment(s.startTime, 'HH:mm');
-      const sEnd = moment(s.endTime, 'HH:mm');
-      return acc + moment.duration(sEnd.diff(sStart)).asHours();
-    }, 0);
+    const totalWeekHours = schedules
+      .filter(s => s.employee === selectedEmployee)
+      .reduce((acc, s) => {
+        const sStart = moment(s.startTime, 'HH:mm');
+        const sEnd = moment(s.endTime, 'HH:mm');
+        return acc + moment.duration(sEnd.diff(sStart)).asHours();
+      }, 0);
 
-    if (totalDayHours + duration > 8) return setNotification({ type: 'error', message: 'No se puede trabajar más de 8h por día.' });
-    if (totalWeekHours + duration > 46) return setNotification({ type: 'error', message: 'No se puede trabajar más de 46h por semana.' });
+    if (totalDayHours + duration > 8) return setNotification({ type: 'error', message: 'Máx. 8h por día' });
+    if (totalWeekHours + duration > 46) return setNotification({ type: 'error', message: 'Máx. 46h por semana' });
 
     const payload = {
       employee: selectedEmployee,
@@ -125,9 +128,9 @@ export default function SchedulePage() {
       });
       setForm({ day: '', startTime: '', endTime: '' });
       fetchData();
-      setNotification({ type: 'success', message: 'Horario agregado exitosamente.' });
+      setNotification({ type: 'success', message: 'Horario agregado.' });
     } catch (err) {
-      console.error('Error al agregar horario:', err);
+      console.error('Error:', err);
     }
   };
 
@@ -135,17 +138,17 @@ export default function SchedulePage() {
     const newStart = moment(start);
     const newEnd = moment(end);
     const durationHours = moment.duration(newEnd.diff(newStart)).asHours();
-    if (durationHours > 8) return setNotification({ type: 'error', message: 'No se puede trabajar más de 8h por día.' });
+    if (durationHours > 8) return setNotification({ type: 'error', message: 'Máx. 8h por día' });
 
     const day = newStart.format('dddd');
-
     const empSchedules = schedules.filter(s => s.employee === event.employee && s._id !== event.id);
     const totalWeekHours = empSchedules.reduce((acc, s) => {
       const startS = moment(s.startTime, 'HH:mm');
       const endS = moment(s.endTime, 'HH:mm');
       return acc + moment.duration(endS.diff(startS)).asHours();
     }, durationHours);
-    if (totalWeekHours > 46) return setNotification({ type: 'error', message: 'No se puede trabajar más de 46h por semana.' });
+
+    if (totalWeekHours > 46) return setNotification({ type: 'error', message: 'Máx. 46h por semana' });
 
     const payload = {
       startTime: newStart.format('HH:mm'),
@@ -160,7 +163,7 @@ export default function SchedulePage() {
       fetchData();
       setNotification({ type: 'success', message: 'Horario actualizado.' });
     } catch (err) {
-      console.error('Error al mover horario:', err);
+      console.error(err);
     }
   };
 
@@ -176,24 +179,35 @@ export default function SchedulePage() {
           fetchData();
           setNotification({ type: 'success', message: 'Horario eliminado.' });
         } catch (err) {
-          console.error('Error al eliminar horario:', err);
+          console.error('Error:', err);
         }
       }
     });
   };
 
-  const eventStyleGetter = () => ({
-    style: {
-      backgroundColor: '#007bff',
-      borderRadius: '5px',
-      border: 'none',
-      color: 'white',
-      padding: '4px',
-      cursor: 'pointer',
-      transition: '0.2s',
-    },
-    className: 'calendar-event'
-  });
+  const eventStyleGetter = (event) => {
+    const start = moment(event.start);
+    const end = moment(event.end);
+    const duration = moment.duration(end.diff(start)).asHours();
+
+    let backgroundColor = '#28a745'; // verde
+    if (duration > 2 && duration <= 4) backgroundColor = '#ffc107'; // amarillo
+    else if (duration > 4 && duration <= 6) backgroundColor = '#fd7e14'; // naranja
+    else if (duration > 6) backgroundColor = '#dc3545'; // rojo
+
+    return {
+      style: {
+        backgroundColor,
+        border: 'none',
+        color: 'white',
+        borderRadius: '5px',
+        padding: '4px 6px',
+        cursor: 'pointer',
+        fontWeight: 500,
+      },
+      className: 'calendar-event',
+    };
+  };
 
   const filteredEmployees = employees.filter(emp => emp.restaurant === selectedRestaurant);
 
@@ -204,40 +218,58 @@ export default function SchedulePage() {
 
         {notification && <Notification {...notification} onClose={() => setNotification(null)} />}
 
-        <div className="row mb-3">
-          <div className="col-md-6 mb-2">
-            <select className="form-select" value={selectedRestaurant} onChange={handleSelectRest}>
-              <option value="">Selecciona Restaurante</option>
-              {restaurants.map(r => <option key={r._id} value={r._id}>{r.name}</option>)}
-            </select>
+        <div className="row g-2 mb-3">
+          <div className="col-md-6">
+            <FormSelectGroup
+              label="Restaurante"
+              name="restaurant"
+              value={selectedRestaurant}
+              onChange={handleSelectRest}
+              options={restaurants.map(r => ({ value: r._id, label: r.name }))}
+            />
           </div>
-          <div className="col-md-6 mb-2">
-            <select className="form-select" value={selectedEmployee} onChange={handleSelectEmp}>
-              <option value="">Selecciona Empleado</option>
-              {filteredEmployees.map(e => <option key={e._id} value={e._id}>{e.name}</option>)}
-            </select>
+          <div className="col-md-6">
+            <FormSelectGroup
+              label="Empleado"
+              name="employee"
+              value={selectedEmployee}
+              onChange={handleSelectEmp}
+              options={filteredEmployees.map(e => ({ value: e._id, label: e.name }))}
+              disabled={!selectedRestaurant}
+            />
           </div>
         </div>
 
         {selectedEmployee && (
           <form className="mb-4 p-3 bg-white shadow rounded" onSubmit={handleSubmit}>
-            <div className="row row-cols-1 row-cols-md-4 g-3">
-              <div className="col">
-                <select className="form-select" name="day" value={form.day} onChange={handleFormChange} required>
-                  <option value="">Día</option>
-                  {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(d => (
-                    <option key={d} value={d}>{d}</option>
-                  ))}
-                </select>
+            <div className="row g-3">
+              <div className="col-md-3">
+                <FormSelectGroup
+                  label="Día"
+                  name="day"
+                  value={form.day}
+                  onChange={handleFormChange}
+                  options={['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].map(d => ({ value: d, label: d }))}
+                />
               </div>
-              <div className="col">
-                <input type="time" className="form-control" name="startTime" value={form.startTime} onChange={handleFormChange} required />
+              <div className="col-md-3">
+                <FormTimeInput
+                  label="Entrada"
+                  name="startTime"
+                  value={form.startTime}
+                  onChange={handleFormChange}
+                />
               </div>
-              <div className="col">
-                <input type="time" className="form-control" name="endTime" value={form.endTime} onChange={handleFormChange} required />
+              <div className="col-md-3">
+                <FormTimeInput
+                  label="Salida"
+                  name="endTime"
+                  value={form.endTime}
+                  onChange={handleFormChange}
+                />
               </div>
-              <div className="col">
-                <button className="btn btn-success w-100 h-100" type="submit">Agregar horario</button>
+              <div className="col-md-3 d-grid">
+                <button type="submit" className="btn btn-success h-100">Agregar</button>
               </div>
             </div>
           </form>
@@ -258,4 +290,6 @@ export default function SchedulePage() {
       </div>
     </DashboardLayout>
   );
-}
+};
+
+export default SchedulePage;

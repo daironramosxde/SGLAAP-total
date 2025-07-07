@@ -1,0 +1,74 @@
+/* src/styles/custom-theme.css */
+
+/* General */
+body {
+  background-color: #f8f9fa;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Tarjetas */
+.card {
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+/* Botones */
+.btn {
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn-success {
+  background-color: #00b894;
+  border: none;
+}
+
+.btn-primary {
+  background-color: #0984e3;
+  border: none;
+}
+
+.btn-danger {
+  background-color: #d63031;
+  border: none;
+}
+
+/* Formularios */
+.form-control {
+  border-radius: 8px;
+  border-color: #ced4da;
+  box-shadow: none;
+  transition: border-color 0.3s;
+}
+
+.form-control:focus {
+  border-color: #74b9ff;
+  box-shadow: 0 0 0 0.2rem rgba(9, 132, 227, 0.25);
+}
+
+/* Etiquetas */
+.form-label {
+  font-weight: 500;
+  color: #2d3436;
+}
+
+/* Transiciones */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
